@@ -2,7 +2,9 @@
 
 Listed in random order
 
+* [IT技術者のためのブログ: コントロール名 命名規則](https://itnotebookorigin.blogspot.com/2014/10/blog-post_29.html)
 * [neue cc - .NET 6とAngleSharpによるC#でのスクレイピング技法](https://neue.cc/2021/12/04.html)→[GitHub版](https://github.com/neuecc/Blog2/blob/master/articles/2021-12-04.md)
+* [【C#】AngleSharpの使い方メモ - Qiita](https://qiita.com/NekozeDaisensei/items/c74f71e5d79d6de05841)
 * [コントロールのGraphicsオブジェクトを使って、画像を表示する - .NET Tips (VB.NET,C#...)](https://dobon.net/vb/dotnet/graphics/creategraphics.html)
 * [PictureBoxコントロールに簡単に画像を表示する - .NET Tips (VB.NET,C#...)](https://dobon.net/vb/dotnet/graphics/pictureboximage.html)
 * [処理中に進捗率表示とキャンセルボタンで中止はasync、await、Task.Run、Progress、CancellationTokenSource - 午後わてんのブログ](https://gogowaten.hatenablog.com/entry/15489172)
@@ -16,3 +18,13 @@ Listed in random order
 * [Control.DataBindings プロパティ (System.Windows.Forms) | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/system.windows.forms.control.databindings?view=windowsdesktop-6.0)
 * [Binding コンストラクター (System.Windows.Forms) | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/system.windows.forms.binding.-ctor?f1url=%3FappId%3DDev16IDEF1%26l%3DJA-JP%26k%3Dk(System.Windows.Forms.Binding.%2523ctor)%3Bk(DevLang-csharp)%26rd%3Dtrue&view=windowsdesktop-6.0#system-windows-forms-binding-ctor(system-string-system-object-system-string-system-boolean-system-windows-forms-datasourceupdatemode))
 * [DataSourceUpdateMode 列挙型 (System.Windows.Forms) | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/system.windows.forms.datasourceupdatemode?view=windowsdesktop-6.0)
+* [.NET の正規表現 | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/regular-expressions)
+* [Stream.CopyTo メソッド (System.IO) | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/system.io.stream.copyto?f1url=%3FappId%3DDev16IDEF1%26l%3DJA-JP%26k%3Dk(System.IO.Stream.CopyTo);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0)
+* [StreamWriter コンストラクター (System.IO) | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/system.io.streamwriter.-ctor?view=net-6.0#system-io-streamwriter-ctor(system-string-system-text-encoding-system-io-filestreamoptions))
+* [方法: テキストのファイルへの書き込み | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/io/how-to-write-text-to-a-file#example-synchronously-append-text-with-streamwriter)
+* [FileMode 列挙型 (System.IO) | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/system.io.filemode?view=net-6.0)
+* [StreamWriter.Flush メソッド (System.IO) | Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/system.io.streamwriter.flush?f1url=%3FappId%3DDev16IDEF1%26l%3DJA-JP%26k%3Dk(System.IO.StreamWriter.Flush);k(DevLang-csharp)%26rd%3Dtrue&view=net-6.0)
+* [TextBoxでの改行について](https://social.msdn.microsoft.com/Forums/vstudio/ja-JP/76a10b10-8166-4969-a750-acf3216a54f7/textbox1239112398259133489212395123881235612390)
+* [TextBox（またはRichTextBox）の最後の行までスクロールさせる - .NET Tips (VB.NET,C#...)](https://dobon.net/vb/dotnet/control/tbscrolltolast.html)
+* [c# async/await でテキスト書き込みすると抜けがある](https://teratail.com/questions/22752)
+* [Windowsのファイル名最大文字数は？ファイル名が半角や全角の場合は？](https://salaryman-life.blogspot.com/2013/06/windows.html)
