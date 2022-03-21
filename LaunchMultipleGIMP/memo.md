@@ -1,5 +1,7 @@
 # Reference
 
+Listed in random order
+
 * [フォームやコントロールの形を変える - .NET Tips (VB.NET,C#...)](https://dobon.net/vb/dotnet/form/formregion.html)
 * [特殊ディレクトリのパスを取得する - .NET Tips (VB.NET,C#...)](https://dobon.net/vb/dotnet/file/getfolderpath.html)
 * [オブジェクトの内容をXMLファイルに保存、復元する - .NET Tips (VB.NET,C#...)](https://dobon.net/vb/dotnet/file/xmlserializer.html)
