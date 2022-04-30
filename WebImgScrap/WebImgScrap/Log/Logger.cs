@@ -22,13 +22,15 @@ namespace WebImgScrap.Log
         /// </summary>
         private const string logFormat = "[{0}]{1}:{2}";
 
+#pragma warning disable CS8618 // logWriterにnull値が入っていることへの警告を無視
         /// <summary>
         /// コンストラクタ
         /// </summary>
         public Logger()
         {
-            logWriter = new StreamWriter("");
+
         }
+#pragma warning restore CS8618
 
         /// <summary>
         /// ストリームの開始処理
