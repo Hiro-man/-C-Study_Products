@@ -61,6 +61,15 @@ namespace WebImgScrap.Properties {
         }
         
         /// <summary>
+        ///   Web画像ダウンローダー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string APP_FORM_NAME {
+            get {
+                return ResourceManager.GetString("APP_FORM_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   セキュリティソフトにファイルへのアクセスがブロックされている可能性があります．
         ///本アプリのファイルへのアクセスのブロックを解除してください． に類似しているローカライズされた文字列を検索します。
         /// </summary>

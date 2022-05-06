@@ -1,5 +1,8 @@
 ﻿namespace WebImgScrap.Setting
 {
+    /// <summary>
+    /// 設定ダイアログ
+    /// </summary>
     public partial class SettingDialog : Form
     {
         /// <summary>
@@ -10,13 +13,13 @@
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="title">フォームタイトル</param>
-        public SettingDialog(string title, Data.SettingData data)
+        /// <param name="data">MainFormが持っている設定データのオブジェクト</param>
+        public SettingDialog(Data.SettingData data)
         {
             InitializeComponent();
                
             // 初期値設定
-            this.Text = title;
+            this.Text = Properties.Resources.APP_FORM_NAME;
             this.settingData = data;
 
             // データを各コントロールにバインド
@@ -29,8 +32,8 @@
         /// <summary>
         /// chkRetryによってレイアウト変更
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">イベント</param>
         private void chkRetry_CheckedChanged(object sender, EventArgs e)
         {
             int length = 30;
@@ -56,8 +59,8 @@
         /// <summary>
         /// 画像を自動保存する際の保存先フォルダを選択する
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">イベント</param>
         private void btnSelectAutoSaveFolda_Click(object sender, EventArgs e)
         {
             //FolderBrowserDialogクラスのインスタンスを作成
@@ -77,8 +80,8 @@
         /// <summary>
         /// パスを書き換えた際，存在しないフォルダパスの場合に初期値に戻す
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">イベント</param>
         private void txtAutoSaveFolda_Validated(object sender, EventArgs e)
         {
             // 存在しないフォルダパスの場合

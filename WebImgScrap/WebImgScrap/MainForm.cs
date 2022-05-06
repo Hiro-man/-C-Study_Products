@@ -1,19 +1,10 @@
 namespace WebImgScrap
 {
+    /// <summary>
+    /// メイン画面
+    /// </summary>
     public partial class MainForm : Form
     {
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private string Message 
-        {
-            set
-            {
-                txtMessage.AppendText(Environment.NewLine + value);
-            }
-        }
-
         /// <summary>
         /// ダウンロードの設定データ
         /// </summary>
@@ -22,12 +13,12 @@ namespace WebImgScrap
         /// <summary>
         /// コントローラ
         /// </summary>
-        MainFormController controller = null;
+        MainFormController controller;
 
         /// <summary>
         /// ロガー
         /// </summary>
-        WebImgScrap.Log.Logger logger = null;
+        WebImgScrap.Log.Logger logger;
 
         /// <summary>
         /// ダウンロード処理のキャンセル判定
@@ -42,163 +33,206 @@ namespace WebImgScrap
         /// <summary>
         /// コンストラクタ
         /// </summary>
+        /// <param name="logger">ロガー</param>
         public MainForm(WebImgScrap.Log.Logger logger)
         {
             InitializeComponent();
 
-            //
+            // フォームタイトルを設定
+            this.Text = Properties.Resources.APP_FORM_NAME;
+            // ロガーの設定（Program.csでロガークラスをインスタンス化したものを代入する）
             this.logger = logger;
-
-            //
-            controller = new MainFormController(logger);
-
-            // デフォルトの画像の保存先を表示
-            //txtAutoSaveFolda.Text = saveDirectory;
+            // コントローラーの設定
+            this.controller = new MainFormController(logger);
         }
 
+        /// <summary>
+        /// chkUrlMultiボタン押下時の処理
+        /// </summary>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">発生したイベント</param>
         private void chkUrlMulti_CheckedChanged(object sender, EventArgs e)
         {
-            //
+            // 変動幅（txtUrlの単一入力時の高さ×2）
             int length = 23 * 2;
-
-            if (chkUrlMulti.Checked)
+            // 複数URLを指定する場合
+            if (this.chkUrlMulti.Checked)
             {
-                txtUrl.Multiline = true;
-                txtUrl.ScrollBars = ScrollBars.Vertical;
-                txtUrl.Size = new Size(txtUrl.Width, length + 23);
-
-                chkUrlMulti.Location = new Point(chkUrlMulti.Location.X, chkUrlMulti.Location.Y + length);
-                txtMessage.Location = new Point(txtMessage.Location.X, txtMessage.Location.Y + length);
-                lblTitle_txtMessage.Location = new Point(lblTitle_txtMessage.Location.X, lblTitle_txtMessage.Location.Y + length);
+                this.txtUrl.Multiline = true;
+                this.txtUrl.ScrollBars = ScrollBars.Vertical;
+                this.txtUrl.Size = new Size(txtUrl.Width, length + 23);
+                // 各コントロールの位置をlength分だけ舌に移動させる
+                this.chkUrlMulti.Location = new Point(chkUrlMulti.Location.X, chkUrlMulti.Location.Y + length);
+                this.txtMessage.Location = new Point(txtMessage.Location.X, txtMessage.Location.Y + length);
+                this.lblTitle_txtMessage.Location = new Point(lblTitle_txtMessage.Location.X, lblTitle_txtMessage.Location.Y + length);
                 this.Size = new Size(this.Size.Width, this.Size.Height + length);
             }
+            // 単一のURL入力とする場合
             else 
             {
-                txtUrl.Multiline= false;
-                txtUrl.ScrollBars = ScrollBars.None;
-
-                chkUrlMulti.Location = new Point(chkUrlMulti.Location.X, chkUrlMulti.Location.Y - length);
-                txtMessage.Location = new Point(txtMessage.Location.X, txtMessage.Location.Y - length);
-                lblTitle_txtMessage.Location = new Point(lblTitle_txtMessage.Location.X, lblTitle_txtMessage.Location.Y - length);
+                this.txtUrl.Multiline= false;
+                this.txtUrl.ScrollBars = ScrollBars.None;
+                // 各コントロールの位置をlength分だけ上に移動させる
+                this.chkUrlMulti.Location = new Point(chkUrlMulti.Location.X, chkUrlMulti.Location.Y - length);
+                this.txtMessage.Location = new Point(txtMessage.Location.X, txtMessage.Location.Y - length);
+                this.lblTitle_txtMessage.Location = new Point(lblTitle_txtMessage.Location.X, lblTitle_txtMessage.Location.Y - length);
                 this.Size = new Size(this.Size.Width, this.Size.Height - length);
             }
         }
 
+        /// <summary>
+        /// 開始ボタン押下時の処理
+        /// </summary>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">発生したイベント</param>
         private async void btnStart_Click(object sender, EventArgs e)
         {
-            //
-            txtMessage.Text = "";
+            // メッセージをクリア
+            this.txtMessage.Text = "";
 
-            //
+            // フラグを有効化
             this.isProcessing = true;
 
-            // 一時的に無効化
-            if(btnStart.Enabled)
+            // 一時的にボタンを無効化
+            if(this.btnStart.Enabled)
             {
-                btnStart.Enabled = false;
-                btnClear.Enabled = false;
-                chkUrlMulti.Enabled = false;
-                txtUrl.ReadOnly = true;
+                this.btnStart.Enabled = false;
+                this.btnClear.Enabled = false;
+                this.chkUrlMulti.Enabled = false;
+                this.txtUrl.ReadOnly = true;
 
             }
-            btnCancel.Enabled = true;
+            this.btnCancel.Enabled = true;
 
-            //
-            string[] urls = txtUrl.Text.Split("\n").Select(url => url.Trim()).ToArray();
+            // GUIで入力されたURLを文字列配列として取得
+            string[] urls = this.txtUrl.Text.Split("\n").Select(url => url.Trim()).ToArray();
             WriteInfo($"全{urls.Length}件のダウンロードを開始");
 
-            //
+            // ダウンロード処理の成功/失敗のフラグ
             bool flag = true;
-
-            //
+            // 処理した件数のカウント
             int cnt = 1;
 
-            //
-            foreach (string url in urls)
+            // 入力したURLを順に処理する
+            foreach (string target in urls)
             {
-                WriteInfo($"{cnt}件目：{url}からのダウンロードを開始");
-
+                // URL文字列
+                string url = target;
+                // URL文字列が正常かどうか判定
+                if (Define.JusgeURL(ref url) == false)
+                {
+                    WriteInfo($"入力された文字列がURLとして不正です．:{url}");
+                    this.txtMessage.AppendText(":スキップします．");
+                    continue;
+                }
+                // 「https://~.html#a 」のようなURLの場合，「#a」部分を削除する
+                else if (string.Compare(url, target) == -1)
+                {
+                    WriteInfo($"入力された文字列を修正しました．{Environment.NewLine}　{target}{Environment.NewLine}→{url}");
+                }
+                
                 try
                 {
-                    if (!string.IsNullOrEmpty(url))
+                    if (string.IsNullOrEmpty(url) == false)
                     {
+                        WriteInfo($"{cnt}件目：{url}からのダウンロードを開始");
+                        // ダウンロード処理を実行
                         flag = await controller.WebScraping(url, settingData, cts.Token) ? flag : false;
+                        if (flag == false)
+                        {
+                            WriteInfo($"{cnt}件目：ダウンロード処理に失敗しました．");
+                            this.txtMessage.AppendText("詳しくはログファイルをご確認ください．");
+                        }
+                        // 1秒待機
                         Thread.Sleep(1000);
-                    }
-
-                    WriteInfo($"{cnt}件目：{url}ダウンロード処理終了");
-                    
-
-                    cnt++;
+                        WriteInfo($"{cnt}件目：{url}からのダウンロード処理終了");
+                        // 件数をカウントアップ
+                        cnt++;
+                    } 
                 }
-                catch (OperationCanceledException calcellEx)
+                // 処理中にキャンセルボタンが押された場合
+                catch (OperationCanceledException)
                 {
-                    //
-                    cts = new CancellationTokenSource();
-                    //
+                    // ログとGUIに出力
+                    WriteInfo("ユーザによってダウンロード処理を中止", Define.LogType.Warning);
+                    // ctsをクリア
+                    this.cts = new CancellationTokenSource();
+                    // ループ処理を中断する
                     break;
                 }
             }
 
-            //
+            // フラグをクリア
             this.isProcessing = false;
 
-            // 無効化を解除
+            // ボタンの無効化を解除
             if (btnStart.Enabled == false)
             {
-                btnStart.Enabled = true;
-                btnClear.Enabled = true;
-                chkUrlMulti.Enabled = true;
-                txtUrl.ReadOnly = false;
+                this.btnStart.Enabled = true;
+                this.btnClear.Enabled = true;
+                this.chkUrlMulti.Enabled = true;
+                this.txtUrl.ReadOnly = false;
             }
-            btnCancel.Enabled = false;
+            this.btnCancel.Enabled = false;
 
-            // 
+            // 処理が終了したことをユーザに通知
             WriteInfo("ダウンロード処理を終了");
         }
 
         /// <summary>
         /// テキストボックスとログにメッセージを出力する
         /// </summary>
-        /// <param name="text"></param>
-        private void WriteInfo(string text)
+        /// <param name="text">対象のテキスト</param>
+        /// <param name="type">ログの種類</param>
+        private void WriteInfo(string text, Define.LogType type = Define.LogType.Info)
         {
-            Message = $"[{DateTime.Now}]{text}";
-            logger.Write(text, Define.LogType.Info);
+            this.txtMessage.AppendText(Environment.NewLine + $"[{DateTime.Now}]{text}");
+            this.logger.Write(text, type);            
         }
 
         /// <summary>
         /// クローズ処理
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">FormClosingイベント</param>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // ロガーのクローズ
-            logger.Close();
+            this.logger.Close();
         }
 
+        /// <summary>
+        /// 設定メニュークリック時の処理
+        /// </summary>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">発生したイベント</param>
         private void mnuItemSetting_Click(object sender, EventArgs e)
         {
             if (isProcessing)
             {
-                MessageBox.Show("ダウンロード処理中は設定できません．", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("ダウンロード処理中は設定できません．", Properties.Resources.APP_FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
-                using (Setting.SettingDialog settingDialog = new Setting.SettingDialog(this.Text, this.settingData))
+                // 設定ダイアログを表示
+                using (Setting.SettingDialog settingDialog = new Setting.SettingDialog(this.settingData))
                 {
                     settingDialog.ShowDialog(this);
-                    settingData = settingDialog.settingData;
+                    this.settingData = settingDialog.settingData;
                 }
             }
         }
 
+        /// <summary>
+        /// 画像一覧メニュークリック時の処理
+        /// </summary>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">発生したイベント</param>
         private void mnuItemImageShow_Click(object sender, EventArgs e)
         {
             if (isProcessing)
             {
-                MessageBox.Show("ダウンロード処理中は表示できません．", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("ダウンロード処理中は表示できません．", Properties.Resources.APP_FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -206,6 +240,7 @@ namespace WebImgScrap
 
                 if (data.Count > 0)
                 {
+                    // 取得した画像を表示するダイアログを表示
                     using (AllShowImageDialog imageDialog = new AllShowImageDialog(this.logger, data))
                     {
                         imageDialog.ShowDialog(this);
@@ -213,7 +248,7 @@ namespace WebImgScrap
                 }
                 else
                 {
-                    MessageBox.Show("表示する画像がありません．", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("表示する画像がありません．", Properties.Resources.APP_FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }
@@ -221,21 +256,23 @@ namespace WebImgScrap
         /// <summary>
         /// ダウンロード処理を中止する
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">発生したイベント</param>
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            cts.Cancel();
+            this.cts.Cancel();
+            // 複数回押下できないように，1度押下したら再度押下できないようにする
+            this.btnCancel.Enabled = false;
         }
 
         /// <summary>
         /// URLを入力するテキストボックスを空にする
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">イベントが発生したコントロール</param>
+        /// <param name="e">発生したイベント</param>
         private void btnClear_Click(object sender, EventArgs e)
         {
-            txtUrl.Text = "";
+            this.txtUrl.Text = "";
         }
     }
 }

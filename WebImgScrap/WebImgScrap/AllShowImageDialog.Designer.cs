@@ -154,6 +154,7 @@
             this.Controls.Add(this.mainMenu);
             this.MainMenuStrip = this.mainMenu;
             this.Name = "AllShowImageDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AllShowImageDialog";
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
